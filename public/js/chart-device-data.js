@@ -102,7 +102,7 @@ $(document).ready(() => {
           labelString: 'Temperature (ºC)',
           display: true,
         },
-        position: 'left',
+        position: 'right',
       },
       {
         id: 'Humidity',
@@ -111,7 +111,7 @@ $(document).ready(() => {
           labelString: 'Humidity (%)',
           display: true,
         },
-        position: 'right',
+        position: 'left',
       }]
     }
   };
@@ -220,6 +220,9 @@ $(document).ready(() => {
       drawSensehatAccelerometerChart(accel);
       drawSensehatAccelerometerBarChart(accel)
       drawSensehatAccelerometerYColumnChart(accel)
+
+      temp = device.temperatureData[device.temperatureData.length - 1];
+      drawSenseHatTemperatureGuage(temp);
 
       $('#truck-front').css({transform:'rotate(0deg)'})
       $('#truck').css({transform:'rotate(0deg)'})

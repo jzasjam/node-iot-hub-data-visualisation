@@ -5,12 +5,12 @@
     <title>Pi SenseHat Data Visualisation from Azure IoTHub by Jonathan ZJ</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--
+
     <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
     <link rel="manifest" href="favicon/site.webmanifest">
--->
+
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <!-- Font-Awesome CSS -->
@@ -43,7 +43,7 @@
             <!-- <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right"
                 href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i
                     class="fa fa-bars"></i></a> -->
-            <a href="./" class="w3-bar-item w3-button w3-padding-large"><strong>Pi SenseHat Data Visualisation from Azure IoTHub</strong> | Jonathan Zasada-James [31051167]</a>
+            <a href="./" class="w3-bar-item w3-button w3-padding-large"><img src="favicon/favicon-16x16.png" /> <strong>Pi SenseHat Data Visualisation from Azure IoTHub</strong> | Jonathan Zasada-James [31051167]</a>
             <!-- <a href="./" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Draw</a> -->
             <!-- <a href="./send_message.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Send Message</a> -->
         </div>
@@ -66,8 +66,13 @@
                 </span>
                 <strong>Temperature & Humidity Real-Time Data</strong>
             </h4>
-            <div>
-                <canvas id="iotChart"></canvas>
+            <div class="row">
+                <div class="col-md-8">
+                    <canvas id="iotChart"></canvas>
+                </div>
+                <div class="col-md-4">
+                    <div id="sensehat_temperature_guage_chart" style="display: inline-block;  height: 240px; width: 100%;"></div>
+                </div>
             </div>
 
             <h4>IMU Sensors</h4>
@@ -77,13 +82,13 @@
                 
                 <div class="col-md" style=" padding:10px; border: 4px solid #999; border-radius: 1em; box-shadow: 0px 3px 4px 0px #aaa; margin-bottom: 1em;">
                     <div><i id="truck" class="fa fa-solid fa-truck fa-8x fa-fw"></i></div>
-                    <div id="sensehat_accelerometer_Ycolumn_chart" style="display: inline-block;  height: 240px; width: 100%;"></div>
+                    <div id="sensehat_accelerometer_Ycolumn_chart" style="display: inline-block;  height: 140px; width: 100%;"></div>
                 </div>
                 
                 
                 <div class="col-md" style=" padding:10px; border: 4px solid #999; border-radius: 1em; box-shadow: 0px 3px 4px 0px #aaa; margin-bottom: 1em;">
                     <div><i id="truck-front" class="fa fa-solid fa-truck-front fa-8x fa-fw"></i></div>
-                    <div id="sensehat_accelerometer_Xbar_chart" style="display: inline-block;  height: 240px; width: 100%;"></div>
+                    <div id="sensehat_accelerometer_Xbar_chart" style="display: inline-block;  height: 140px; width: 100%;"></div>
                 </div>
             </div>
 
@@ -102,10 +107,6 @@
             </div>
 
             <div id="sensehat_accelerometer_Zcolumn_chart" style="display: none; width: 880px; height: 240px; padding:10px; border: 4px solid #999; border-radius: 1em; box-shadow: 0px 3px 4px 0px #aaa; margin-bottom: 1em; max-width: 100%;"></div>
-            
-            
-             
-            
             
             <div id="sensehat_accelerometer_chart" style="width: 275px; height: 500px; display: inline-block; min-width: 30%; padding:10px; border: 4px solid #999; border-radius: 1em; box-shadow: 0px 3px 4px 0px #aaa; margin-bottom: 1em;"></div>
             <div id="sensehat_gyroscope_chart" style="width: 280px; height: 500px; display: inline-block; min-width: 30%; padding:10px; border: 4px solid #999; border-radius: 1em; box-shadow: 0px 3px 4px 0px #aaa; margin: 0 10px; margin-bottom: 1em;"></div>
@@ -206,9 +207,9 @@ function setCubeRotation(x, y, z) {
         cube.scale.z = 2.5;
     } else 
     if($('#3d-model').val() == "pi") {
-        cube.scale.x = 2.75;
+        cube.scale.x = 2.5;
         cube.scale.y = 0.75;
-        cube.scale.z = 2;
+        cube.scale.z = 2.25;
     } else 
     if($('#3d-model').val() == "box") {
         cube.scale.x = 1.5;
@@ -233,7 +234,39 @@ function setCubeRotation(x, y, z) {
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
 
+ ////////////////////////////////
+    // Temperature Guage Chart
 
+        google.charts.load('current', {'packages':['gauge']});
+        google.charts.setOnLoadCallback(drawSenseHatTemperatureGuage);
+
+        function drawSenseHatTemperatureGuage(chartData=0) {
+
+            
+
+            var data = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['Temp', chartData]
+            ]);
+
+            var options = {
+                width: 220, height: 220,
+                redFrom: 50, redTo: 60,
+                yellowFrom:40, yellowTo: 50,
+                minorTicks: 5,
+                max: 60
+            };
+
+            var chart = new google.visualization.Gauge(document.getElementById('sensehat_temperature_guage_chart'));
+
+            chart.draw(data, options);
+
+            //setInterval(function() {
+                //data.setValue(0, 1, 20 + Math.round(40 * Math.random())); //Displays a random number for testing
+                data.setValue(0, 1, chartData);
+                chart.draw(data, options);
+            //}, 1000);
+        }
 
  ////////////////////////////////
     // Accelerometer Bar Chart
