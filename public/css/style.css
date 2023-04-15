@@ -45,7 +45,7 @@ select:disabled::-ms-expand {
   background: #f60;
 }
 
-
+/* Truck Icon Images */
 i#truck-front, i#truck {
   /* margin: 0.2em; */
   border: 1px solid #999;
@@ -54,4 +54,19 @@ i#truck-front, i#truck {
   width: 2em;
   height: 2em;
   padding-top: 0.5em;
+}
+
+/* Device Select Box */
+span#deviceSelect {
+  background: #e3e3e3;
+  border: 1px solid #ccc;
+  padding: 1em;
+  border-radius: 0.5em;
+  font-size: 1.2em;
+  margin-top: 0.4em;
+  display: inline-block;
+}
+
+span#deviceCount {
+  text-transform: capitalize;
 }
