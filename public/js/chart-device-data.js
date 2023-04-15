@@ -4,7 +4,7 @@
 $(document).ready(() => {
   // if deployed to a site supporting SSL, use wss://
   const protocol = document.location.protocol.startsWith('https') ? 'wss://' : 'ws://';
-  const webSocket = new WebSocket(protocol + location.host);
+  const webSocket = new WebSocket(protocol + location.host + '/public');
 
   // A class for holding the last N points of telemetry for a device
   class DeviceData {
