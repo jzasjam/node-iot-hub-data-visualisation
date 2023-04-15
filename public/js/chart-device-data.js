@@ -153,7 +153,7 @@ $(document).ready(() => {
 
       // time and either temperature or humidity are required
       if (!messageData.MessageDate || (!messageData.IotData.temperature && !messageData.IotData.humidity)) {
-        return;
+        //return;
       }
 
       // find or add device to list of tracked devices
@@ -168,9 +168,16 @@ $(document).ready(() => {
       }
       messageData.MessageDate = dateStr;
       
+        if(messageData.DeviceId=='SamsungS9') {
+          //alert(messageData.DeviceId);
+          messageData.IotData.accel = messageData.IotData.accelerometer
+        }
+
       if (existingDeviceData) {
         existingDeviceData.addData(messageData.MessageDate, messageData.IotData.temperature, messageData.IotData.humidity, messageData.IotData.pressure, messageData.IotData.accel, messageData.IotData.compass, messageData.IotData.gyro);
       } else {
+
+
         const newDeviceData = new DeviceData(messageData.DeviceId);
         trackedDevices.devices.push(newDeviceData);
         const numDevices = trackedDevices.getDevicesCount();
@@ -216,28 +223,37 @@ $(document).ready(() => {
       gyro = device.gyroData[device.gyroData.length - 1];
       drawSensehatGyroscopeChart(gyro);
       
-      accel = device.accelData[device.accelData.length - 1];
-      drawSensehatAccelerometerChart(accel);
-      drawSensehatAccelerometerBarChart(accel)
-      drawSensehatAccelerometerYColumnChart(accel)
 
       temp = device.temperatureData[device.temperatureData.length - 1];
       drawSenseHatTemperatureGuage(temp);
 
-      $('#truck-front').css({transform:'rotate(0deg)'})
-      $('#truck').css({transform:'rotate(0deg)'})
       // If the device has accelerometer data, rotate the truck
-      if(device.accelData[device.accelData.length - 1]){
+      if(device.accelData[device.accelData.length - 1] && device.accelData[device.accelData.length - 1].x != null){
+        
+        $('#truck-front').css({transform:'rotate(0deg)'})
+        $('#truck').css({transform:'rotate(0deg)'})
+        accel = device.accelData[device.accelData.length - 1];
+        drawSensehatAccelerometerChart(accel);
+        drawSensehatAccelerometerBarChart(accel)
+        drawSensehatAccelerometerYColumnChart(accel)
+        
         accelX = device.accelData[device.accelData.length - 1].x;
         accelY = device.accelData[device.accelData.length - 1].y;
         accelZ = device.accelData[device.accelData.length - 1].z;
+
+        if(device.deviceId=='SamsungS9'){
+          accelX = -(device.accelData[device.accelData.length - 1].x)/10;
+          accelY = (device.accelData[device.accelData.length - 1].y)/10;
+          accelZ = (device.accelData[device.accelData.length - 1].z)/10;
+        }
+
         $('#truck-front').css({transform:'rotate('+ -(accelX*90) +'deg)'})
         $('#truck').css({transform:'rotate('+ -(accelY*90) +'deg)'})
 
         setCubeRotation(accelX, accelY, accelZ);
         document.getElementById("3d-render").style.display = "block";
       } else {
-        document.getElementById("3d-render").style.display = "none";
+        //document.getElementById("3d-render").style.display = "none";
       }
 
 
