@@ -185,6 +185,7 @@ $(document).ready(() => {
           //alert(messageData.DeviceId);
           messageData.IotData.accel = messageData.IotData.accelerometer
           messageData.IotData.gyro = messageData.IotData.gyroscope
+          messageData.IotData.compass = messageData.IotData.magnetometer
         }
 
       if (existingDeviceData) {
@@ -230,9 +231,11 @@ $(document).ready(() => {
       //accelZ = device.accelData[device.accelData.length - 1].z;
       //drawSensehatAccelerometerZColumnChart(accelZ)
       
-      compass = device.compassData[device.compassData.length - 1];
-      drawSensehatCompassChart(compass);
-      
+      if(device.compassData[device.compassData.length - 1] && device.compassData[device.compassData.length - 1].x != null){
+        compass = device.compassData[device.compassData.length - 1];
+        drawSensehatCompassChart(compass);
+      }
+
       if(device.gyroData[device.gyroData.length - 1] && device.gyroData[device.gyroData.length - 1].x != null){
         gyro = device.gyroData[device.gyroData.length - 1];
         drawSensehatGyroscopeChart(gyro);
