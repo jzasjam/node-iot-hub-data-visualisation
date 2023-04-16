@@ -137,6 +137,18 @@ $(document).ready(() => {
     chartData.datasets[0].data = device.temperatureData;
     chartData.datasets[1].data = device.humidityData;
     myLineChart.update();
+
+    // Clear the charts
+    $('#truck-front').css({transform:'rotate(0deg)'})
+    $('#truck').css({transform:'rotate(0deg)'})
+    drawSensehatAccelerometerBarChart();
+    drawSensehatAccelerometerYColumnChart();
+    drawSensehatAccelerometerChart();
+    drawSensehatGyroscopeChart();
+    drawSensehatCompassChart();
+    // Set the 3d device/object to initial position
+    setCubeRotation(0,0,0);
+
   }
   listOfDevices.addEventListener('change', OnSelectionChange, false);
 
