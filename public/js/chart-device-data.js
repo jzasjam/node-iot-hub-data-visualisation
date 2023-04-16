@@ -139,6 +139,7 @@ $(document).ready(() => {
     myLineChart.update();
 
     // Clear the charts
+    //------------------
     $('#truck-front').css({transform:'rotate(0deg)'})
     $('#truck').css({transform:'rotate(0deg)'})
     drawSensehatAccelerometerBarChart();
@@ -183,6 +184,7 @@ $(document).ready(() => {
         if(messageData.DeviceId=='SamsungS9') {
           //alert(messageData.DeviceId);
           messageData.IotData.accel = messageData.IotData.accelerometer
+          messageData.IotData.gyro = messageData.IotData.gyroscope
         }
 
       if (existingDeviceData) {
@@ -195,7 +197,6 @@ $(document).ready(() => {
         const numDevices = trackedDevices.getDevicesCount();
         deviceCount.innerText = numDevices === 1 ? `${numDevices} device` : `${numDevices} devices`;
         
-
         newDeviceData.addData(messageData.MessageDate, messageData.IotData.temperature, messageData.IotData.humidity, messageData.IotData.pressure, messageData.IotData.accel, messageData.IotData.compass, messageData.IotData.gyro);
 
         // add device to the UI list
@@ -232,9 +233,10 @@ $(document).ready(() => {
       compass = device.compassData[device.compassData.length - 1];
       drawSensehatCompassChart(compass);
       
-      gyro = device.gyroData[device.gyroData.length - 1];
-      drawSensehatGyroscopeChart(gyro);
-      
+      if(device.gyroData[device.gyroData.length - 1] && device.gyroData[device.gyroData.length - 1].x != null){
+        gyro = device.gyroData[device.gyroData.length - 1];
+        drawSensehatGyroscopeChart(gyro);
+      }
 
       temp = device.temperatureData[device.temperatureData.length - 1];
       drawSenseHatTemperatureGuage(temp);
