@@ -7,6 +7,7 @@ $(document).ready(() => {
   const webSocket = new WebSocket(protocol + location.host);
 
   // A class for holding the last N points of telemetry for a device
+    // UPDATED TO INCLUDE ADDITIONAL SENSEHAT DATA
   class DeviceData {
     constructor(deviceId) {
       this.deviceId = deviceId;
@@ -138,7 +139,7 @@ $(document).ready(() => {
     chartData.datasets[1].data = device.humidityData;
     myLineChart.update();
 
-    // Clear the charts
+    // Clear the charts / Return to Default
     //------------------
     $('#truck-front').css({transform:'rotate(0deg)'})
     $('#truck').css({transform:'rotate(0deg)'})
@@ -147,7 +148,7 @@ $(document).ready(() => {
     drawSensehatAccelerometerChart();
     drawSensehatGyroscopeChart();
     drawSensehatCompassChart();
-    // Set the 3d device/object to initial position
+    // SET THE 3D OBJECT TO DEFAULT POSITION
     setCubeRotation(0,0,0);
 
   }
@@ -181,6 +182,7 @@ $(document).ready(() => {
       }
       messageData.MessageDate = dateStr;
       
+      // HANDLE DATA COMING FROM SAMSUNG S9 VIA IoT PLUG AND PLAY APP (diferent attributes names)
         if(messageData.DeviceId=='SamsungS9') {
           //alert(messageData.DeviceId);
           messageData.IotData.accel = messageData.IotData.accelerometer
@@ -216,21 +218,9 @@ $(document).ready(() => {
 
       myLineChart.update();
       
-      //alert(messageData.IotData.accel);
       const device = trackedDevices.findDevice(listOfDevices[listOfDevices.selectedIndex].text);
-      //alert(device.accelData[device.accelData.length - 1].x);
-
-      //accelX = device.accelData[device.accelData.length - 1].x;
-      //drawSensehatAccelerometerBarChart(accelX)
-      //$('#truck-front').css({transform:'rotate('+ -(accelX*90) +'deg)'})
-
-      //accelY = device.accelData[device.accelData.length - 1].y;
-      //drawSensehatAccelerometerYColumnChart(accelY)
-      //$('#truck').css({transform:'rotate('+ -(accelY*90) +'deg)'})
-
-      //accelZ = device.accelData[device.accelData.length - 1].z;
-      //drawSensehatAccelerometerZColumnChart(accelZ)
       
+      // DRAW THE CHARTS WITH LATEST DATA
       if(device.compassData[device.compassData.length - 1] && device.compassData[device.compassData.length - 1].x != null){
         compass = device.compassData[device.compassData.length - 1];
         drawSensehatCompassChart(compass);
@@ -244,7 +234,7 @@ $(document).ready(() => {
       temp = device.temperatureData[device.temperatureData.length - 1];
       drawSenseHatTemperatureGuage(temp);
 
-      // If the device has accelerometer data, rotate the truck
+      // IF THE DEVICE HAS ACCELEROMETER DATA, UPDATE THE CHARTS AND VISUALS
       if(device.accelData[device.accelData.length - 1] && device.accelData[device.accelData.length - 1].x != null){
         
         $('#truck-front').css({transform:'rotate(0deg)'})
@@ -254,21 +244,26 @@ $(document).ready(() => {
         drawSensehatAccelerometerBarChart(accel)
         drawSensehatAccelerometerYColumnChart(accel)
         
+        // GET THE LATEST ACCELEROMETER AXIS VALUES
         accelX = device.accelData[device.accelData.length - 1].x;
         accelY = device.accelData[device.accelData.length - 1].y;
         accelZ = device.accelData[device.accelData.length - 1].z;
-
+        
+        // HANDLE DATA COMING FROM SAMSUNG S9 VIA IoT PLUG AND PLAY APP (diferent value range)
         if(device.deviceId=='SamsungS9'){
           accelX = -(device.accelData[device.accelData.length - 1].x)/10;
           accelY = (device.accelData[device.accelData.length - 1].y)/10;
           accelZ = (device.accelData[device.accelData.length - 1].z)/10;
         }
 
+        // ROTATE ICONS
         $('#truck-front').css({transform:'rotate('+ -(accelX*90) +'deg)'})
         $('#truck').css({transform:'rotate('+ -(accelY*90) +'deg)'})
 
+        // ROTATE THE 3D OBJECT
         setCubeRotation(accelX, accelY, accelZ);
         document.getElementById("3d-render").style.display = "block";
+
       } else {
         //document.getElementById("3d-render").style.display = "none";
       }

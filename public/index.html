@@ -27,11 +27,6 @@
     <script src="js/chart-device-data.js" type="text/javascript" charset="utf-8"></script>
     <link href="css/style.css" rel="stylesheet" />
 
-    <style>
-        body {
-            font-family: "Lato", sans-serif
-        }
-    </style>
 </head>
 
 <body>
@@ -40,12 +35,7 @@
     <!-- Navbar -->
     <div class="w3-top">
         <div class="w3-bar w3-black w3-card">
-            <!-- <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right"
-                href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i
-                    class="fa fa-bars"></i></a> -->
             <a href="./" class="w3-bar-item w3-button w3-padding-large"><img src="favicon/favicon-16x16.png" /> <strong>Azure IoTHub Device Data Visualisation</strong> | Jonathan Zasada-James [31051167]</a>
-            <!-- <a href="./" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Draw</a> -->
-            <!-- <a href="./send_message.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Send Message</a> -->
         </div>
     </div>
 
@@ -57,6 +47,8 @@
         <!-- The Main Section -->
         <div class="w3-container-fluid w3-content w3-center w3-padding-64" style="max-width:900px" id="band">
             <h3 class="w3-wide">Azure IoTHub Device Data Visualisation<br><small class="text-muted">Using Chart.js, Google Charts and Three.js</small></h3>
+            
+            <!-- Device Selection -->
             <div class="text-center">
                 <span id="deviceSelect">
                     <span id="deviceCount">0 Devices</span>:  
@@ -161,109 +153,6 @@
         <p class="w3-medium">Created by Jonathan Zasada-James [31051167] 2023</p>
     </footer>
 
-    
-
-
-
-<!-- Include the three.js library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<!-- 3D Render with Three.js -->
-<script type="text/javascript">
-
-    // Create a new scene
-    const scene = new THREE.Scene();
-
-    // Create a new box geometry
-    //const geometry = new THREE.BoxGeometry(3, 0.75, 2);
-    //const geometry = new THREE.BoxGeometry(1, 1.5, 2);
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-
-    // Create a new material
-    const material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa, flatShading: true });
-
-    // Create a new mesh using the box geometry and material
-    const cube = new THREE.Mesh(geometry, material);
-
-    // Add the mesh to the scene
-    scene.add(cube);
-
-    // Add Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambientLight);
-    scene.background = new THREE.Color( 0xffffff );
-
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
-    dirLight.position.set(10, 20, 0); // x, y, z
-    scene.add(dirLight);
-
-    // Set the initial rotation of the mesh
-    //cube.rotation.x = 0;
-    //cube.rotation.y = 0;
-    //cube.rotation.z = 0;
-
-    // Create a new camera object
-    const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-    );
-
-    // Set the position of the camera
-    camera.position.z = 3;
-    // Create a new renderer and set its size
-    const renderer = new THREE.WebGLRenderer();
-    //renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setSize(850, 400);
-
-    // Add the renderer to the document
-    //document.body.appendChild(renderer.domElement);
-    const div = document.getElementById('3d-render');
-    div.appendChild(renderer.domElement);
-
-    // Render the scene
-    renderer.render(scene, camera);
-    
-
-
-// Set the rotation of the shape
-function setCubeRotation(x, y, z) {
-    
-    cube.rotation.z = -(x*1.57);
-    cube.rotation.x = (y*1.57);
-    //cube.rotation.y = (z*1.57); // Is not needed
-    
-    if($('#3d-model').val() == "truck") {
-        cube.scale.x = 1;
-        cube.scale.y = 1.5;
-        cube.scale.z = 2.5;
-    } else 
-    if($('#3d-model').val() == "pi") {
-        cube.scale.x = 2.5;
-        cube.scale.y = 0.75;
-        cube.scale.z = 2.25;
-    } else 
-    if($('#3d-model').val() == "phone") {
-        cube.scale.x = 1;
-        cube.scale.y = 0.2;
-        cube.scale.z = 2.1;
-    }
-    if($('#3d-model').val() == "box") {
-        cube.scale.x = 1.5;
-        cube.scale.y = 1.5;
-        cube.scale.z = 1.5;
-    } else 
-    if($('#3d-model').val() == "stretcher") {
-        cube.scale.x = 1.25;
-        cube.scale.y = 0.2;
-        cube.scale.z = 2.5;
-    }
-
-    // Render the scene
-    renderer.render(scene, camera);
-
-}
-</script>
     
 
 <!-- GOOGLE CHARTS -->
@@ -383,43 +272,6 @@ function setCubeRotation(x, y, z) {
 
 
     
-    ////////////////////////////////
-    // Accelerometer Z Column Chart
-    /*
-        // load the visualization library from Google and set a listener
-        google.charts.load("visualization", "1", {packages:["corechart","bar"]});
-        google.charts.setOnLoadCallback(drawSensehatAccelerometerZColumnChart);
-        
-        function drawSensehatAccelerometerZColumnChart(chartData) {
-
-            
-            let z = chartData;
-
-            var data = google.visualization.arrayToDataTable([
-                ['Movement', '#', { role: 'style' }],
-                //['X', +x, '#b87333'],            // RGB value
-                //['Y', +y, 'silver'],            // English color name
-                ['Z', +z, 'gold']
-            ]);
-
-            var options = {
-                title: 'Accelerometer (latest captured values)',
-                legend: 'none',
-                
-                hAxis: {title: 'Type of Movement'},
-                vAxis: {title: 'Amount of Movement', maxValue: 1, minValue: -1},
-            };
-
-            var chart = new google.visualization.ColumnChart(
-                document.getElementById('sensehat_accelerometer_Zcolumn_chart'));
-
-            chart.draw(data, options);
-
-
-        }
-    */
-
-
 ////////////////////////////////
 // Accelerometer Column Chart
     
@@ -551,7 +403,109 @@ function setCubeRotation(x, y, z) {
 </script>
 
 
+<!-- CREATE A 3D OBJECT WHICH ROTATES WITH DEVICE ACCELEROMETER USING THREE.JS-->
 
+<!-- Include the three.js library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- 3D Render with Three.js -->
+<script type="text/javascript">
+
+    // Create a new scene
+    const scene = new THREE.Scene();
+
+    // Create a new box geometry
+    //const geometry = new THREE.BoxGeometry(3, 0.75, 2);
+    //const geometry = new THREE.BoxGeometry(1, 1.5, 2);
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+
+    // Create a new material
+    const material = new THREE.MeshPhongMaterial({ color: 0xaaaaaa, flatShading: true });
+
+    // Create a new mesh using the box geometry and material
+    const cube = new THREE.Mesh(geometry, material);
+
+    // Add the mesh to the scene
+    scene.add(cube);
+
+    // Add Lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
+    scene.background = new THREE.Color( 0xffffff );
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    dirLight.position.set(10, 20, 0); // x, y, z
+    scene.add(dirLight);
+
+    // Set the initial rotation of the mesh
+    //cube.rotation.x = 0;
+    //cube.rotation.y = 0;
+    //cube.rotation.z = 0;
+
+    // Create a new camera object
+    const camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+    );
+
+    // Set the position of the camera
+    camera.position.z = 3;
+    // Create a new renderer and set its size
+    const renderer = new THREE.WebGLRenderer();
+    //renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(850, 400);
+
+    // Add the renderer to the document
+    //document.body.appendChild(renderer.domElement);
+    const div = document.getElementById('3d-render');
+    div.appendChild(renderer.domElement);
+
+    // Render the scene
+    renderer.render(scene, camera);
+    
+
+
+// Set the rotation of the shape
+function setCubeRotation(x, y, z) {
+    
+    cube.rotation.z = -(x*1.57);
+    cube.rotation.x = (y*1.57);
+    //cube.rotation.y = (z*1.57); // Is not needed
+    
+    // Change the selected shape
+    if($('#3d-model').val() == "truck") {
+        cube.scale.x = 1;
+        cube.scale.y = 1.5;
+        cube.scale.z = 2.5;
+    } else 
+    if($('#3d-model').val() == "pi") {
+        cube.scale.x = 2.5;
+        cube.scale.y = 0.75;
+        cube.scale.z = 2.25;
+    } else 
+    if($('#3d-model').val() == "phone") {
+        cube.scale.x = 1;
+        cube.scale.y = 0.2;
+        cube.scale.z = 2.1;
+    }
+    if($('#3d-model').val() == "box") {
+        cube.scale.x = 1.5;
+        cube.scale.y = 1.5;
+        cube.scale.z = 1.5;
+    } else 
+    if($('#3d-model').val() == "stretcher") {
+        cube.scale.x = 1.25;
+        cube.scale.y = 0.2;
+        cube.scale.z = 2.5;
+    }
+
+    // Render the scene
+    renderer.render(scene, camera);
+
+}
+</script>
+    
 
 </body>
 
