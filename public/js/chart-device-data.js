@@ -232,7 +232,10 @@ $(document).ready(() => {
       }
 
       temp = device.temperatureData[device.temperatureData.length - 1];
+      // Round temp to 0 decimal places
+      temp = Math.round(temp * 10) / 10;
       drawSenseHatTemperatureGuage(temp);
+      //console.log("Temperature: " + temp + "ºC");
 
       // IF THE DEVICE HAS ACCELEROMETER DATA, UPDATE THE CHARTS AND VISUALS
       if(device.accelData[device.accelData.length - 1] && device.accelData[device.accelData.length - 1].x != null){
